@@ -22,6 +22,10 @@ class Person extends Party {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
+
+    public function __toString(){
+        return 'Name Person: ' . $this->getDisplayName() . ' (' . $this->firstName . ' ' . $this->lastName . ')';
+    }
 }
 
 class OrgUnit extends Party {
@@ -36,15 +40,19 @@ class OrgUnit extends Party {
     public function addEmployee(Person $employee) {
         $this->employees[] = $employee;
     }
-
-    public function getDisplayName() {
-        return $this->name;
-    }
     
     public function getEmployees() {
         return $this->employees;
     }
-    
+    public function __toString(){
+        echo 'Name OrgUnit: ' . $this->getDisplayName() . "<br>";
+        $result = "Employees:<br>";
+        foreach ($this->employees as $employee) {
+            $result .= $employee . "<br>";
+        }
+        return $result;
+    }
+
 
 }
 
@@ -61,13 +69,12 @@ class Company extends Party {
     }
 
     public function getDescription() {
-        foreach($this->units as $unit){
-            echo "\nUnit: " . $unit->getDisplayName();
-            
-            foreach($unit->getEmployees() as $employee) {
-                echo "\t\nEmployee: " . $employee->getDisplayName();
-            }
+        echo 'Company: ' . $this->getDisplayName() . "<br><br>";
+        $result = "<br>OrgUnits:<br>";
+        foreach ($this->units as $unit) {
+            $result .= $unit . "<br>";
         }
+        return $result;
     }
 }
 
@@ -76,7 +83,7 @@ $company = new Company("MyCompany");
 
 // Crear personas
 $person1 = new Person("Person One", "Person", "One");
-$person2 = new Person("Person One", "Person", "Two");
+$person2 = new Person("Person Two", "Person", "Two");
 
 // Crear OrgUnits
 $orgUnit1 = new OrgUnit("OrgUnit1", "Org1");
@@ -84,9 +91,8 @@ $orgUnit2 = new OrgUnit("OrgUnit2", "Org2");
 
 $orgUnit1->addEmployee($person1);
 $orgUnit2->addEmployee($person2);
-
 $company->addUnit($orgUnit1);
 $company->addUnit($orgUnit2);
 
 // Mostrar información
-$company->getDescription();
+echo $company->getDescription();
